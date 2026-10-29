@@ -31,7 +31,7 @@ subgraph ROW2[" "]
 
   subgraph P2["③ JUN16 · Is it new?"]
     direction TB
-    C0["<b>WHAT I WANT FROM THE NEXT 3 MONTHS</b><br/>research-heavy · solid code for GitHub ·<br/>a real role for my advisor (data science + econ)"]
+    C0["<b>WHAT I WANT FROM THE NEXT 3 MONTHS</b><br/>research-based · also some code on GitHub ·<br/>a real role for me to bring a unique notion (data science + econ)"]
     C1[["<b>WHAT ALREADY EXISTS</b><br/>Ustun et al. (2019) · Gupta et al. (2019)<br/>Sharma et al. (2020), 'burden'<br/>von Kügelgen et al., causal recourse"]]
     C2["<b>REALIZATION</b><br/>My 'gap' already exists as 'recourse fairness'.<br/>Only the income lens + econ framing were mine."]
     C3["<b>IDEA A</b><br/>Redo it on real HMDA mortgage denials, and add<br/>'time to qualify': years of wage growth<br/>needed to close the gap"]
@@ -56,7 +56,7 @@ subgraph ROW3[" "]
     direction TB
     E0["<b>QUESTIONS WHERE EITHER ANSWER IS INTERESTING</b><br/>1. Did dropping the 43% DTI rule (2022)<br/>   actually expand credit?<br/>2. Do poorer borrowers pay more than<br/>   their risk justifies?<br/>3. 'Hidden denials': withdrawn or<br/>   incomplete applications"]
     E1[["<b>WHAT I CHECKED</b><br/>UMich Poverty Solutions (2025) already covers #3<br/>Stevens, 'Leveling the Field', is close to #2"]]
-    E2["<b>WHY I PICKED #2</b><br/>Closest to what I care about, uses data<br/>I already have, and measures real outcomes<br/>instead of a model's guess.<br/><i>#1 stays as a backup · #3 set aside</i>"]
+    E2["<b>WHY I PICKED #2</b><br/>Closest to what I care about, uses data<br/>I already have, and measures real outcomes<br/>instead of a model's guess.<br/><i></i>"]
     E0 --> E1 --> E2
   end
 
@@ -64,7 +64,7 @@ subgraph ROW3[" "]
     direction TB
     F0["<b>CURRENT QUESTION</b> (working hypothesis)<br/>For loans with the same grade and rate,<br/>do low-income loans earn investors more?<br/>More → they're overcharged, subsidizing richer borrowers<br/>Less → their risk is underpriced"]
     F1["<b>WHERE I NEED MY ADVISOR</b><br/>• measuring realized returns properly<br/>• is 'same grade, different income' fair to compare?<br/>• placing it in the 'poor pay more' literature"]
-    F2["<b>NEXT</b><br/>Meet my advisor → then ~2 weeks: clean data,<br/>first return calculation, first chart of<br/>returns by income within each grade"]
+    F2["<b>NEXT</b><br/>then ~2 weeks: clean data,<br/>first return calculation, first chart of<br/>returns by income within each grade"]
     F3["<b>STILL OPEN</b><br/>grades already use income · I only see<br/>approved loans · what's new beyond Stevens?"]
     F0 --> F1 --> F2 --> F3
   end
