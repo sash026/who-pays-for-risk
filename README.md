@@ -15,7 +15,7 @@ subgraph ROW1[" "]
     A0 --> A1 --> A2 --> A3 --> A4
   end
 
-  subgraph P1["② OCT 22 · Revisiting v1"]
+  subgraph P1["② JUN 08 · Revisiting v1"]
     direction TB
     B0["<b>WHY I REOPENED IT</b><br/>I'd forgotten why I started, so I re-read my<br/>own code to reconstruct it and check<br/>whether v1 still holds up."]
     B1["<b>WHAT I FOUND</b><br/>• 'denied' was really 'defaulted': I was<br/>  predicting repayment, not approval<br/>• a DTI units bug (% vs decimal) broke<br/>  the DTI results<br/>• part of the 7.7× is just dividing by<br/>  smaller incomes<br/>• applicants who never flipped were<br/>  left out of the averages<br/>• my notebooks + report draft were missing"]
@@ -29,7 +29,7 @@ end
 subgraph ROW2[" "]
   direction LR
 
-  subgraph P2["③ OCT 22 · Is it new?"]
+  subgraph P2["③ JUN16 · Is it new?"]
     direction TB
     C0["<b>WHAT I WANT FROM THE NEXT 3 MONTHS</b><br/>research-heavy · solid code for GitHub ·<br/>a real role for my advisor (data science + econ)"]
     C1[["<b>WHAT ALREADY EXISTS</b><br/>Ustun et al. (2019) · Gupta et al. (2019)<br/>Sharma et al. (2020), 'burden'<br/>von Kügelgen et al., causal recourse"]]
@@ -39,7 +39,7 @@ subgraph ROW2[" "]
     C0 --> C1 --> C2 --> C3 --> C4
   end
 
-  subgraph P3["④ OCT 22 · Is it useful?"]
+  subgraph P3["④ AUGUST 1 · Is it useful?"]
     direction TB
     D0["<b>OPTIONS I LOOKED AT</b><br/>• who got priced out by the 2022–23 rate hikes<br/>• an open-source fair-lending audit tool<br/>• alternative data for 'credit invisible' people"]
     D1["<b>WHAT I REALIZED</b><br/>'Useful' wasn't really what I meant.<br/>I want a finding that gives people<br/>something new to think about."]
@@ -52,7 +52,7 @@ end
 subgraph ROW3[" "]
   direction LR
 
-  subgraph P4["⑤ OCT 22 · Surprising?"]
+  subgraph P4["⑤ AUGUST24 · Surprising?"]
     direction TB
     E0["<b>QUESTIONS WHERE EITHER ANSWER IS INTERESTING</b><br/>1. Did dropping the 43% DTI rule (2022)<br/>   actually expand credit?<br/>2. Do poorer borrowers pay more than<br/>   their risk justifies?<br/>3. 'Hidden denials': withdrawn or<br/>   incomplete applications"]
     E1[["<b>WHAT I CHECKED</b><br/>UMich Poverty Solutions (2025) already covers #3<br/>Stevens, 'Leveling the Field', is close to #2"]]
