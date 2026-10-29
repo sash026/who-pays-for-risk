@@ -1,151 +1,80 @@
 ```mermaid
-flowchart TD
+%%{init: {"flowchart": {"wrappingWidth": 420, "nodeSpacing": 25, "rankSpacing": 35, "padding": 10}}}%%
+flowchart TB
 
-%% ============ PHASE 0 ============
-subgraph P0["PHASE 0 · Spring 2026 · Independent study (v1)"]
-  direction TB
-  M0["MOTIVATION<br/>I wanted to study financial exclusion:<br/>is the path to credit approval harder for low-income people?"]
-  R_KL[["King & Levine (1993)<br/>Finance and Growth: Schumpeter Might Be Right<br/>QJE 108(3), 717–737"]]
-  R_W[["Wachter, Mittelstadt & Russell (2017)<br/>Counterfactual Explanations without Opening the Black Box<br/>Harvard JOLT 31, 841–887"]]
-  R_K[["Karimi, Schölkopf & Valera (2021)<br/>Algorithmic Recourse: From Counterfactual Explanations to Interventions<br/>FAccT 2021"]]
-  CONCEPT["MY CONCEPT: the 'Qualification Gap'<br/>= the smallest change to a denied applicant's profile<br/>that flips the model from denied to approved"]
-  RQ["RESEARCH QUESTION<br/>'How does the Qualification Gap disproportionately<br/>vary across income tiers in the P2P lending market?'"]
-  DS_LC[("DATA: Lending Club Loan Data 2007–2018 (Kaggle)<br/>filtered to 2015–2018 → 835,999 records")]
-  ABAN_REJ["DROPPED<br/>Rejected-applications file<br/>(no income column)"]
-  METH["METHOD<br/>Fully Paid = 'approved', Charged Off/Default = 'denied' (stand-in)<br/>Logistic Regression + Decision Tree on 4 features<br/>Grid search: income +$2k steps up to $60k; DTI −2% steps up to 40%<br/>5,000 denied applicants, 1,250 per income bracket · DuckDB"]
-  RES0["v1 RESULTS<br/>Income increase needed: 47.1% low vs 6.1% high = 7.7×<br/>Dollar gap: $14,193 → $7,464<br/>AUC ≈ 0.61 · Spearman ρ = 0.80"]
-  FW0["v1 FUTURE WORK<br/>FICO imputation · HMDA mortgages · continuous optimization<br/>race/gender split · Oaxaca–Blinder decomposition"]
+subgraph ROW1[" "]
+  direction LR
+
+  subgraph P0["① SPRING 2026 · v1"]
+    direction TB
+    A0["<b>WHY I STARTED</b><br/>Rejection rates show who is shut out of credit,<br/>not how far out they are. I wanted to measure<br/>that distance, and see if it's bigger<br/>for low-income people."]
+    A1[["<b>WHAT I READ TO GROUND IT</b><br/>King & Levine (1993): credit access drives growth<br/>Wachter et al. (2017): counterfactual explanations<br/>Karimi et al. (2021): algorithmic recourse"]]
+    A2["<b>MY IDEA: the 'Qualification Gap'</b><br/>the smallest change that flips a credit model<br/>from 'denied' to 'approved'"]
+    A3["<b>HOW I BUILT IT</b><br/>Lending Club 2015–18, 836k loans. The rejected<br/>file had no income, so I used defaults as a<br/>stand-in for denial. Trained LR + a decision tree,<br/>then grid-searched income and DTI changes<br/>for 5,000 'denied' applicants."]
+    A4["<b>WHAT I GOT</b><br/>Low-income: +47% income needed<br/>High-income: +6% → a 7.7× gap"]
+    A0 --> A1 --> A2 --> A3 --> A4
+  end
+
+  subgraph P1["② OCT 22 · Revisiting v1"]
+    direction TB
+    B0["<b>WHY I REOPENED IT</b><br/>I'd forgotten why I started, so I re-read my<br/>own code to reconstruct it and check<br/>whether v1 still holds up."]
+    B1["<b>WHAT I FOUND</b><br/>• 'denied' was really 'defaulted': I was<br/>  predicting repayment, not approval<br/>• a DTI units bug (% vs decimal) broke<br/>  the DTI results<br/>• part of the 7.7× is just dividing by<br/>  smaller incomes<br/>• applicants who never flipped were<br/>  left out of the averages<br/>• my notebooks + report draft were missing"]
+    B3["<b>WHAT I CONCLUDED</b><br/>The question still matters to me,<br/>but v1 doesn't hold up as a finding."]
+    B0 --> B1 --> B3
+  end
+
+  P0 -->|"months<br/>later"| P1
 end
 
-M0 -->|"why credit access matters"| R_KL
-M0 -->|"how to measure 'what would it take'"| R_W
-R_W -->|"counterfactual framework"| CONCEPT
-R_K -->|"recourse framing"| CONCEPT
-R_KL --> CONCEPT
-CONCEPT --> RQ
-RQ --> DS_LC
-DS_LC -->|"real denials lack income"| ABAN_REJ
-ABAN_REJ -->|"used defaults as a stand-in for denial"| METH
-DS_LC --> METH
-METH --> RES0
-RES0 --> FW0
+subgraph ROW2[" "]
+  direction LR
 
-%% ============ PHASE 1 ============
-subgraph P1["PHASE 1 · Oct 2026 · Reviewing v1"]
-  direction TB
-  U1["I came back to the project after a few months<br/>and re-read the code and results critically"]
-  FL1["ISSUE: 'denied' really meant defaulted<br/>→ the model predicted repayment, not approval"]
-  FL2["ISSUE: DTI units bug<br/>Lending Club stores DTI in % (e.g. 18.5) but my steps ran 0–0.40<br/>→ the DTI gap results were meaningless"]
-  FL3["ISSUE: part of the 7.7× is arithmetic<br/>(the same $ is a bigger % of a smaller income)"]
-  FL4["ISSUE: applicants who never flipped (23–36%) were left out of averages<br/>· income changed while DTI held fixed<br/>· ρ = 0.80 on only 4 points (p ≈ 0.2)"]
+  subgraph P2["③ OCT 22 · Is it new?"]
+    direction TB
+    C0["<b>WHAT I WANT FROM THE NEXT 3 MONTHS</b><br/>research-heavy · solid code for GitHub ·<br/>a real role for my advisor (data science + econ)"]
+    C1[["<b>WHAT ALREADY EXISTS</b><br/>Ustun et al. (2019) · Gupta et al. (2019)<br/>Sharma et al. (2020), 'burden'<br/>von Kügelgen et al., causal recourse"]]
+    C2["<b>REALIZATION</b><br/>My 'gap' already exists as 'recourse fairness'.<br/>Only the income lens + econ framing were mine."]
+    C3["<b>IDEA A</b><br/>Redo it on real HMDA mortgage denials, and add<br/>'time to qualify': years of wage growth<br/>needed to close the gap"]
+    C4["<b>WHY I DROPPED IT</b><br/>It felt like a contribution to an<br/>academic niche, not something useful."]
+    C0 --> C1 --> C2 --> C3 --> C4
+  end
+
+  subgraph P3["④ OCT 22 · Is it useful?"]
+    direction TB
+    D0["<b>OPTIONS I LOOKED AT</b><br/>• who got priced out by the 2022–23 rate hikes<br/>• an open-source fair-lending audit tool<br/>• alternative data for 'credit invisible' people"]
+    D1["<b>WHAT I REALIZED</b><br/>'Useful' wasn't really what I meant.<br/>I want a finding that gives people<br/>something new to think about."]
+    D0 --> D1
+  end
+
+  P2 -->|"look for<br/>something<br/>more useful"| P3
 end
 
-RES0 -->|"revisited months later"| U1
-U1 --> FL1
-U1 --> FL2
-U1 --> FL3
-U1 --> FL4
+subgraph ROW3[" "]
+  direction LR
 
-%% ============ PHASE 2 ============
-subgraph P2["PHASE 2 · Novelty check + first pivot idea"]
-  direction TB
-  C1["MY GOALS FOR THE NEXT 3 MONTHS<br/>research-heavy · a solid open-source codebase<br/>· a real role for my advisor (data science + economics)"]
-  R_U[["Ustun, Spangher & Liu (2019)<br/>Actionable Recourse in Linear Classification"]]
-  R_G[["Gupta et al. (2019)<br/>Equalizing Recourse across Groups"]]
-  R_S[["Sharma et al. (2020)<br/>CERTIFAI: 'burden'"]]
-  R_VK[["von Kügelgen et al.<br/>On the Fairness of Causal Algorithmic Recourse<br/>arxiv.org/abs/2010.06529"]]
-  INS1["INSIGHT<br/>My 'gap' already exists as 'recourse fairness' / 'burden'<br/>What was mine: grouping by INCOME + an economics/exclusion framing"]
-  PIV_A["IDEA A (considered)<br/>'How far from a loan, and how long to get there?'<br/>HMDA mortgage denials · causally consistent recourse<br/>'time to qualify' in years of wage growth · Oaxaca–Blinder"]
-  R_F[["Fuster et al.<br/>Predictably Unequal? The Effects of Machine Learning on Credit Markets"]]
-  ABAN_A["SET ASIDE<br/>mostly an academic contribution;<br/>didn't feel useful enough"]
+  subgraph P4["⑤ OCT 22 · Surprising?"]
+    direction TB
+    E0["<b>QUESTIONS WHERE EITHER ANSWER IS INTERESTING</b><br/>1. Did dropping the 43% DTI rule (2022)<br/>   actually expand credit?<br/>2. Do poorer borrowers pay more than<br/>   their risk justifies?<br/>3. 'Hidden denials': withdrawn or<br/>   incomplete applications"]
+    E1[["<b>WHAT I CHECKED</b><br/>UMich Poverty Solutions (2025) already covers #3<br/>Stevens, 'Leveling the Field', is close to #2"]]
+    E2["<b>WHY I PICKED #2</b><br/>Closest to what I care about, uses data<br/>I already have, and measures real outcomes<br/>instead of a model's guess.<br/><i>#1 stays as a backup · #3 set aside</i>"]
+    E0 --> E1 --> E2
+  end
+
+  subgraph P5["⑥ NOW → next 3 months"]
+    direction TB
+    F0["<b>CURRENT QUESTION</b> (working hypothesis)<br/>For loans with the same grade and rate,<br/>do low-income loans earn investors more?<br/>More → they're overcharged, subsidizing richer borrowers<br/>Less → their risk is underpriced"]
+    F1["<b>WHERE I NEED MY ADVISOR</b><br/>• measuring realized returns properly<br/>• is 'same grade, different income' fair to compare?<br/>• placing it in the 'poor pay more' literature"]
+    F2["<b>NEXT</b><br/>Meet my advisor → then ~2 weeks: clean data,<br/>first return calculation, first chart of<br/>returns by income within each grade"]
+    F3["<b>STILL OPEN</b><br/>grades already use income · I only see<br/>approved loans · what's new beyond Stevens?"]
+    F0 --> F1 --> F2 --> F3
+  end
+
+  P4 -->|"picked<br/>#2"| P5
 end
 
-FL1 -->|"v1 doesn't hold up as a finding"| C1
-C1 --> INS1
-R_U -->|"group disparities in recourse cost already studied"| INS1
-R_G --> INS1
-R_S -->|"my 'gap' = their 'burden'"| INS1
-R_VK -->|"recourse that ignores how features depend on each other is misleading"| INS1
-INS1 -->|"need real denials + realistic recourse + an econ angle"| PIV_A
-FW0 -->|"builds on my HMDA + Oaxaca–Blinder ideas"| PIV_A
-R_F --> PIV_A
-PIV_A --> ABAN_A
+ROW1 -->|"if v1 is broken, is the idea at least new?"| ROW2
+ROW2 -->|"refocus on surprising, not just useful"| ROW3
 
-%% ============ PHASE 3 ============
-subgraph P3["PHASE 3 · 'Useful' directions"]
-  direction TB
-  O1["Who got priced out by the 2022–23 rate hikes?<br/>HMDA 2018–2024 · difference-in-differences"]
-  O2["Open-source fair-lending audit tool"]
-  O3["Alternative data and 'credit invisible' borrowers<br/>(little public data)"]
-  REDIR["RE-FOCUS<br/>Usefulness isn't enough; I want a finding<br/>that gives people something new to think about"]
-end
-
-ABAN_A --> O1
-ABAN_A --> O2
-ABAN_A --> O3
-O1 -.-> REDIR
-O2 -.-> REDIR
-O3 -.-> REDIR
-
-%% ============ PHASE 4 ============
-subgraph P4["PHASE 4 · 'Surprising finding' directions"]
-  direction TB
-  S1["Did removing the 43% DTI rule (CFPB, late 2022)<br/>actually expand credit? · HMDA before/after"]
-  S2["Do poorer borrowers pay more interest than their risk justifies?<br/>Same Lending Club grade/rate → compare realized investor returns by income"]
-  S3["'Hidden denials': withdrawn / closed-for-incompleteness applications"]
-  R_UM[["UMich Poverty Solutions (2025)<br/>Racial Disparities in the Mortgage Application Process:<br/>Evidence from 2018 to 2024"]]
-  R_URB[["Urban Institute<br/>What Different Denial Rates Can Tell Us<br/>About Racial Disparities in the Mortgage Market"]]
-  R_STV[["Stevens Institute of Technology<br/>Leveling the Field: Equitable Interest Rates<br/>for Unsecured Personal Loans"]]
-  ABAN_S3["SET ASIDE<br/>the racial angle is already covered"]
-end
-
-REDIR --> S1
-REDIR --> S2
-REDIR --> S3
-R_UM -->|"existing work"| ABAN_S3
-R_URB -.-> S3
-S3 --> ABAN_S3
-R_STV -->|"closest prior work: I must stand apart by income focus, $ size, direction"| S2
-CONCEPT -.->|"same 'gap' idea, at a real DTI threshold"| S1
-
-%% ============ PHASE 5 ============
-subgraph P5["PHASE 5 · CURRENT DIRECTION (working hypothesis)"]
-  direction TB
-  CUR["Income-based cross-subsidy in Lending Club pricing<br/>Same grade + same rate → do low-income loans return MORE to investors?<br/>MORE = low-income borrowers overcharged, subsidizing richer borrowers<br/>LESS = platform underpricing their risk"]
-  WHY["WHY THIS DIRECTION<br/>Same fairness question as v1, but measured with real loan outcomes<br/>instead of a model's prediction on a stand-in for denial<br/>· uses data I already have"]
-  PROF["WHERE MY ADVISOR COMES IN<br/>① measuring realized returns (early payoff, partial default, loan terms)<br/>② is 'same grade, different income' a fair comparison?<br/>(the grade already uses income-linked info; only approved loans are visible)<br/>③ framing in the economics literature on 'the poor pay more'"]
-  ME["MY PART<br/>rebuild the data pipeline · tested return-calculation package<br/>· reproducible figures and write-up"]
-end
-
-S2 --> CUR
-FL1 -->|"realized returns are directly observed"| WHY
-CUR --> WHY
-WHY --> PROF
-CUR --> ME
-R_STV -.-> PROF
-
-%% ============ PHASE 6 ============
-subgraph P6["NEXT STEPS + OPEN QUESTIONS"]
-  direction TB
-  N0["Advisor meeting: share this update and get feedback on methods"]
-  N1["Next ~2 weeks: clean data → first return calculation<br/>→ first chart of returns by income within each grade"]
-  L1["Also: recover v1 notebooks and report draft · read the Stevens paper closely<br/>· confirm available columns (int_rate, grade, payments, FICO range)"]
-  Q1["OPEN: Is 'same grade, different income' a fair comparison?"]
-  Q2["OPEN: How do I handle seeing only approved loans?"]
-  Q3["OPEN: What's new beyond existing P2P-pricing work?"]
-  Q4["BACKUP: the 43% DTI rule question"]
-end
-
-PROF --> N0
-N0 --> N1
-ME --> N1
-CUR --> L1
-PROF --> Q1
-PROF --> Q2
-R_STV --> Q3
-S1 -.-> Q4
-
-%% ============ STYLES ============
 classDef idea fill:#FFF4CC,stroke:#B38F00,color:#000
 classDef res fill:#E3EEFF,stroke:#2D5BA8,color:#000
 classDef find fill:#E6F6EA,stroke:#2E7D32,color:#000
@@ -154,11 +83,14 @@ classDef aband fill:#F2F2F2,stroke:#888,color:#555,stroke-dasharray:5 4
 classDef cur fill:#FFE1CC,stroke:#D2601A,color:#000,stroke-width:3px
 classDef fut fill:#FFFFFF,stroke:#D2601A,color:#000,stroke-dasharray:3 3
 
-class M0,CONCEPT,RQ,U1,C1,REDIR idea
-class R_KL,R_W,R_K,R_U,R_G,R_S,R_VK,R_F,R_UM,R_URB,R_STV,DS_LC res
-class RES0,FW0,FL1,FL2,FL3,FL4,INS1 find
-class METH,PIV_A,O1,O2,O3,S1,S2,S3 dec
-class ABAN_REJ,ABAN_A,ABAN_S3 aband
-class CUR,WHY,PROF,ME cur
-class N0,N1,L1,Q1,Q2,Q3,Q4 fut
+class A0,A2,B0,C0,D1 idea
+class A1,C1,E1 res
+class A4,B1,B3,C2 find
+class A3,C3,D0,E0,E2 dec
+class C4 aband
+class F0,F1 cur
+class F2,F3 fut
+style ROW1 fill:none,stroke:none
+style ROW2 fill:none,stroke:none
+style ROW3 fill:none,stroke:none
 ```
